@@ -10,15 +10,17 @@ public class MoveToTargetAgent : Agent
     [SerializeField] private Transform env;
     [SerializeField] private Transform target;
     [SerializeField] private MeshRenderer background;
+    private float dist;
 
     public override void OnEpisodeBegin()
     {
         transform.localPosition = new Vector3(Random.Range(-3.5f,-1.5f), 0.56f, Random.Range(-3.5f, 3.5f));
-        target.localPosition = new Vector3(Random.Range(1.5f, 3.5f), 0.56f, Random.Range(-3.5f, 3.5f));
+        //target.localPosition = new Vector3(Random.Range(1.5f, 3.5f), 0.56f, Random.Range(-3.5f, 3.5f));
         
         env.rotation = Quaternion.Euler(0, Random.Range(0, 360f), 0);
         transform.rotation = Quaternion.identity;
-        
+
+        dist = Vector3.Distance(target.localPosition, transform.localPosition);
     }
     //Metoda do okreslenia celu jaki ma osiagnac AI
     public override void CollectObservations(VectorSensor sensor)
@@ -35,6 +37,24 @@ public class MoveToTargetAgent : Agent
         float movementSpeed = 5f;
 
         transform.localPosition += new Vector3(moveX, 0, moveZ) * Time.deltaTime * movementSpeed;
+
+        float distTemp = Vector3.Distance(target.localPosition, transform.localPosition);
+        // przyznawanie nagrod i kar za zmiane dystansu do celu
+        if (distTemp < dist)
+        {
+            dist = distTemp;
+            AddReward(2f);
+        }
+        else if (distTemp > dist)
+        {
+            dist = distTemp;
+            AddReward(-1f);
+        }
+
+        // Kary za d³ugotrwa³e dzia³ania
+        AddReward(-0.5f);
+
+
     }
     //Metoda ktora pozwala uzytkownikowi sterowac dzialaniami w celu testu 
     public override void Heuristic(in ActionBuffers actionsOut)

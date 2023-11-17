@@ -7,7 +7,7 @@ learn with config:
 mlagents-learn config/MoveToTarget.yaml --run-id=TestWithYaml
 
 learn with config and previous model
-mlagents-learn config/MoveToTarget.yaml --initialize-from=MoveToTarget --run-id=TestWithYamlAndInit 
+mlagents-learn config/MoveToTarget.yaml --initialize-from=TestWithYaml --run-id=TestWithYamlAndInit 
 
 Visualizate tensorboard:
 tensorboard --logdir results
