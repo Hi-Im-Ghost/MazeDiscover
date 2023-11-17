@@ -1,0 +1,13 @@
+venv/scripts/actiavte 
+
+learn: 
+mlagents-learn --run-id=TestWithYaml
+
+learn with config:
+mlagents-learn config/MoveToTarget.yaml --run-id=TestWithYaml
+
+learn with config and previous model
+mlagents-learn config/MoveToTarget.yaml --initialize-from=MoveToTarget --run-id=TestWithYamlAndInit 
+
+Visualizate tensorboard:
+tensorboard --logdir results
