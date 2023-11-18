@@ -17,7 +17,7 @@ public class MoveToTargetAgent : Agent
         transform.localPosition = new Vector3(Random.Range(-3.5f,-1.5f), 0.56f, Random.Range(-3.5f, 3.5f));
         //target.localPosition = new Vector3(Random.Range(1.5f, 3.5f), 0.56f, Random.Range(-3.5f, 3.5f));
         
-        env.rotation = Quaternion.Euler(0, Random.Range(0, 360f), 0);
+        //env.rotation = Quaternion.Euler(0, Random.Range(0, 360f), 0);
         transform.rotation = Quaternion.identity;
 
         dist = Vector3.Distance(target.localPosition, transform.localPosition);
@@ -43,16 +43,21 @@ public class MoveToTargetAgent : Agent
         if (distTemp < dist)
         {
             dist = distTemp;
-            AddReward(2f);
+            AddReward(0.1f);
         }
         else if (distTemp > dist)
         {
             dist = distTemp;
-            AddReward(-1f);
+            AddReward(-0.1f);
+        }
+        // Sprawdzenie, czy agent jest zbyt blisko œciany
+        if (IsAgentTooCloseToWall())
+        {
+            AddReward(-0.2f * Time.fixedDeltaTime); // Kara za zbyt bliskie podejœcie do œciany
         }
 
         // Kary za d³ugotrwa³e dzia³ania
-        AddReward(-0.5f);
+        AddReward(-1f / MaxStep);
 
 
     }
@@ -62,20 +67,32 @@ public class MoveToTargetAgent : Agent
         ActionSegment<float> continousActions = actionsOut.ContinuousActions;
         continousActions[0] = Input.GetAxisRaw("Horizontal");
         continousActions[1] = Input.GetAxisRaw("Vertical");
+
+
     }
     private void OnTriggerEnter(Collider collision)
     {
         if(collision.TryGetComponent(out Target target))
         {
-            AddReward(10f);
+            AddReward(1f);
             background.material.color = Color.green;
             EndEpisode();
         }
         else if (collision.TryGetComponent(out Walls walls))
         {
-            AddReward(-2f);
+            AddReward(-0.5f);
             background.material.color = Color.red;
             EndEpisode();
         }
     }
+
+    private bool IsAgentTooCloseToWall()
+    {
+        // Dostosuj odleg³oœæ od œciany, która jest akceptowalna
+        float acceptableDistance = 0.5f;
+
+        // SprawdŸ odleg³oœæ od œciany
+        return Physics.Raycast(transform.position, transform.forward, acceptableDistance);
+    }
 }
+
