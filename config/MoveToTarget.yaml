@@ -17,9 +17,15 @@ behaviors:
       hidden_units: 128
       num_layers: 2
     reward_signals:
-      extrinsic:
+      extrinsic: #uczenie przez dostawanie nagrod
         gamma: 0.99
-        strength: 1.0
+        strength: 0.7
+      gail: #uczenie przez nasladownictwo (proba pokonania nauczyciela/zachowania podobnego)
+        strength: 0.3 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
+        demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
+    behavioral_cloning: #sekcja okreslajaca jak bardzo ma kopiowac to co robi nauczyciel (nie probuje pokonac go) 
+      strength: 0.8 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
+      demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
     max_steps: 500000
     time_horizon: 64
     summary_freq: 10000

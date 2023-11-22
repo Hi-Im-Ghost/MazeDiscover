@@ -11,6 +11,7 @@ public class MoveToTargetAgent : Agent
     [SerializeField] private Transform target;
     [SerializeField] private MeshRenderer background;
     private float dist;
+    private int step;
 
     public override void OnEpisodeBegin()
     {
@@ -22,6 +23,7 @@ public class MoveToTargetAgent : Agent
         dist = Vector3.Distance(target.localPosition, transform.localPosition);
     }
     //Metoda do okreslenia celu jaki ma osiagnac AI
+
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation((Vector3)transform.localPosition); //pozycja AI
@@ -53,20 +55,25 @@ public class MoveToTargetAgent : Agent
 
         // Przesuniêcie agenta
         transform.localPosition += transform.forward * forwardAmount * Time.deltaTime * movementSpeed;
-
+        
         float distTemp = Vector3.Distance(target.localPosition, transform.localPosition);
-        // przyznawanie nagrod i kar za zmiane dystansu do celu
-        if (distTemp < dist)
+        step++;
+        if (step >= 20)
         {
-            dist = distTemp;
-            AddReward(0.1f);
+            // przyznawanie nagrod i kar za zmiane dystansu do celu
+            if (distTemp < dist)
+            {
+                dist = distTemp;
+                AddReward(0.1f);
+            }
+            else if (distTemp > dist)
+            {
+                dist = distTemp;
+                AddReward(-0.1f);
+            }
+            step = 0;
         }
-        else if (distTemp > dist)
-        {
-            dist = distTemp;
-            AddReward(-0.1f);
-        }
-
+        
         // Kary za d³ugotrwa³e dzia³ania
         AddReward(-1f / MaxStep);
 
@@ -106,10 +113,9 @@ public class MoveToTargetAgent : Agent
     {
         if (collision.gameObject.TryGetComponent<Target>(out Target target))
         {
-            Debug.Log("yay");
             AddReward(-0.5f);
-            //background.material.color = Color.red;
-            //EndEpisode();
+            background.material.color = Color.red;
+            
         }
     }
 
@@ -117,9 +123,8 @@ public class MoveToTargetAgent : Agent
     {
         if (collision.gameObject.TryGetComponent<Walls>(out Walls walls))
         {
-            Debug.Log("wow");
             AddReward(-0.1f);
-            //EndEpisode();
+            EndEpisode();
         }
     }
     private void OnTriggerEnter(Collider other)
