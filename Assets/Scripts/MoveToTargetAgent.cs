@@ -11,7 +11,6 @@ public class MoveToTargetAgent : Agent
     [SerializeField] private Transform target;
     [SerializeField] private MeshRenderer background;
     private float dist;
-    private int step;
 
     public override void OnEpisodeBegin()
     {
@@ -20,7 +19,7 @@ public class MoveToTargetAgent : Agent
 
         //env.rotation = Quaternion.Euler(0, Random.Range(0, 360f), 0);
         //transform.rotation = Quaternion.identity;
-        dist = Vector3.Distance(target.localPosition, transform.localPosition);
+        //dist = Vector3.Distance(target.localPosition, transform.localPosition);
     }
     //Metoda do okreslenia celu jaki ma osiagnac AI
 
@@ -28,7 +27,7 @@ public class MoveToTargetAgent : Agent
     {
         sensor.AddObservation((Vector3)transform.localPosition); //pozycja AI
         sensor.AddObservation((Vector3)target.localPosition); //pozycja celu
-        sensor.AddObservation(dist); //dystans
+        //sensor.AddObservation(dist); //dystans
     }
     //Metoda do okreslenia jakich akcji ma sie podjac AI by osiagnac cel
     public override void OnActionReceived(ActionBuffers actions)
@@ -51,31 +50,14 @@ public class MoveToTargetAgent : Agent
         }
 
         // Rotacja agenta
-        transform.Rotate(Vector3.up, turnAmount * Time.deltaTime * movementSpeed * 20f);
+        transform.Rotate(Vector3.up, turnAmount * Time.fixedDeltaTime * movementSpeed * 20f);
 
         // Przesuniêcie agenta
-        transform.localPosition += transform.forward * forwardAmount * Time.deltaTime * movementSpeed;
+        transform.localPosition += transform.forward * forwardAmount * Time.fixedDeltaTime * movementSpeed;
         
-        float distTemp = Vector3.Distance(target.localPosition, transform.localPosition);
-        step++;
-        if (step >= 20)
-        {
-            // przyznawanie nagrod i kar za zmiane dystansu do celu
-            if (distTemp < dist)
-            {
-                dist = distTemp;
-                AddReward(0.1f);
-            }
-            else if (distTemp > dist)
-            {
-                dist = distTemp;
-                AddReward(-0.1f);
-            }
-            step = 0;
-        }
         
         // Kary za d³ugotrwa³e dzia³ania
-        AddReward(-1f / MaxStep);
+        AddReward(-0.0005f);
 
 
     }
@@ -111,25 +93,18 @@ public class MoveToTargetAgent : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent<Target>(out Target target))
+        if (collision.gameObject.CompareTag("Wall"))
         {
-            AddReward(-0.5f);
+            AddReward(-1f);
             background.material.color = Color.red;
-            
+            EndEpisode();
+
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent<Walls>(out Walls walls))
-        {
-            AddReward(-0.1f);
-            EndEpisode();
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent<Target>(out Target target))
+        if (collision.gameObject.CompareTag("Target"))
         {
             AddReward(1f);
             background.material.color = Color.green;
