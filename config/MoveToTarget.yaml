@@ -2,36 +2,42 @@ behaviors:
   MoveToTarget:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 1024 #rozmiar uzywanego doswiadczenia  (dla dyskretnych akcji mniejsza lepsza)
+      batch_size: 256 #rozmiar uzywanego doswiadczenia w kazdej iteracji (dla dyskretnych akcji mniejsza lepsza)
       buffer_size: 10240 #doswiadczenie do zebrania przed aktaulizacja modelu (wieksza wartosc - bardziej stabilne) 
-      learning_rate: 3.0e-4 #sila aktualizacji 
-      beta: 5.0e-3 #intensywnosc regulacja entropi 
+      learning_rate: 0.0003 #poczatkowa szybkosc uczenia sie 
+      beta: 0.005 #intensywnosc regulacja entropi 
       epsilon: 0.2 #dopuszczalny prog rozbieznosci miedzy stara a nowa polityka schodzenia gradientowego (nizsza - stabilne ale wolne uczenie)
       lambd: 0.95 #zaleznosc od nagrod srodowiska 
-      num_epoch: 3 #liczba zejsc gradientu do bufora (mniejsza - bardziej stabilny ale wolniejsze)
-      learning_rate_schedule: linear 
+      num_epoch: 5 #liczba zejsc gradientu do bufora (mniejsza - bardziej stabilny ale wolniejsze)
+      learning_rate_schedule: linear #okreslenie jak zmienia sie szybkosc uczenia w czasie
       beta_schedule: constant
       epsilon_schedule: linear
     network_settings:
       normalize: false #jak dyskretne akcje to powinno sie uzywac false
-      hidden_units: 128
-      num_layers: 2
+      hidden_units: 128 #liczba jednostek znajdujacych sie w warstwie sieci nueronowej 
+      num_layers: 2 #liczba ukrytych warstw w sieci neuronowej 
+      vis_encode_type: simple #typ kodera do kodowania obserwacji 
     reward_signals:
       extrinsic: #uczenie przez dostawanie nagrod
-        gamma: 0.99 
+        gamma: 0.99 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
         strength: 1.0
       curiosity: #wewnetrzna ciekawosc
         strength: 0.01 #wielkosc nagrody generowanej przez ten modul
-        gamma: 0.99
-        encoding_size: 128 #rozmiar warstwy ukrytej (mniejsza - czesciej bedzie probowal cos nowego)
+        gamma: 0.99 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
+        learning_rate: 0.0003
+        encoding_size: 64 #rozmiar warstwy ukrytej (mniejsza - czesciej bedzie probowal cos nowego)
       gail: #uczenie przez nasladownictwo (proba pokonania nauczyciela/zachowania podobnego)
-        gamma: 0.99
-        strength: 0.3 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
+        gamma: 0.9 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
+        strength: 0.2 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
+        learning_rate: 0.0003
+        use_actions: false
+        use_vail: false
         demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
     behavioral_cloning: #sekcja okreslajaca jak bardzo ma kopiowac to co robi nauczyciel (nie probuje pokonac go) 
       strength: 0.5 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
-      steps: 150000
+      steps: 100000 #liczba krokow wykonywana podczas procesu uczenia (jak cos trudnego to zwiekszyc)
       demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
-    max_steps: 1e7 #maksymalna wartosc dzialania agenta podczas szkolenia
-    time_horizon: 64 #ile doswiadczenia ma zebrac zanim doda do bufora
-    summary_freq: 10000
+    keep_checkpoints: 5 #liczba punktow kontrolnych modelu do zachowania
+    max_steps: 50000000 #maksymalna wartosc dzialania agenta podczas szkolenia
+    time_horizon: 128 #ile doswiadczenia ma zebrac zanim doda do bufora
+    summary_freq: 50000 #częstotliwość zapisywania statystyk treningowych.
