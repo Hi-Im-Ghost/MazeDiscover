@@ -68,8 +68,6 @@ public class MazeAcademy : MonoBehaviour
 
     IEnumerator ChangeColorBg(Color color)
     {
-        //var prevColors = floors.Select(t => t.material.color).ToList();
-
         foreach (Renderer t in floors)
         {
             t.material.color = color;

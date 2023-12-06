@@ -1285,16 +1285,12 @@ PrefabInstance:
       propertyPath: MaxStep
       value: 10000
       objectReference: {fileID: 0}
-    - target: {fileID: 4462735581703818803, guid: 16a81023781717e44bb035c59c937665,
+    - target: {fileID: 6222638938440389683, guid: 16a81023781717e44bb035c59c937665,
         type: 3}
-      propertyPath: m_DetectableTags.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4462735581703818803, guid: 16a81023781717e44bb035c59c937665,
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 923b8e5788f726646af51bb801aa07ef,
         type: 3}
-      propertyPath: m_DetectableTags.Array.data[1]
-      value: Target
-      objectReference: {fileID: 0}
     - target: {fileID: 9218887301615410028, guid: 16a81023781717e44bb035c59c937665,
         type: 3}
       propertyPath: Record

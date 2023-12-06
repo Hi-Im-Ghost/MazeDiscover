@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Policies;
+using Unity.VisualScripting;
 
 public class MazeAI : Agent
 {
@@ -13,11 +15,44 @@ public class MazeAI : Agent
     private float StartDistanceToTarget = 0f;
     private float actualDistanceToTarget = 0f;
     private float bestDistanceToTarget = 0f;
+    private BehaviorParameters bp;
+    private DecisionRequester dr;
+    private RayPerceptionSensorComponent3D raySensor;
 
-    private void Start()
+    private void setLearningParams()
     {
-        agentRigibody = GetComponent<Rigidbody>();
-        env = FindObjectOfType<MazeAcademy>();
+        // BEHAVIOR PARAMETERS
+        bp.BehaviorName = "MoveToTarget";
+        bp.BrainParameters.VectorObservationSize = 6;
+        bp.BrainParameters.NumStackedVectorObservations = 1;
+        bp.BrainParameters.ActionSpec = ActionSpec.MakeDiscrete(3, 3);
+        bp.InferenceDevice = InferenceDevice.Default;
+        bp.UseChildSensors = false;
+        bp.ObservableAttributeHandling = ObservableAttributeOptions.Ignore;
+        MaxStep = 10000;
+
+        // DECISION REQUESTER
+        dr.DecisionPeriod = 10;
+        dr.TakeActionsBetweenDecisions = true;
+
+        // RAY SENSOR
+        raySensor.SensorName = "RayPerceptionSensor";
+        raySensor.DetectableTags.Add("Wall");
+        raySensor.DetectableTags.Add("Target");
+        raySensor.RaysPerDirection = 3;
+        raySensor.MaxRayDegrees = 90;
+        raySensor.RayLength = 8;
+        raySensor.ObservationStacks = 1;
+        raySensor.StartVerticalOffset = 0;
+        raySensor.EndVerticalOffset = 0;
+
+    }
+
+    private void setRigibody()
+    {
+        agentRigibody.useGravity = false;
+        agentRigibody.constraints = RigidbodyConstraints.FreezePositionY;
+        agentRigibody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     // Metoda do resetowania srodowiska szkoleniowego
@@ -32,9 +67,22 @@ public class MazeAI : Agent
         agentRigibody.angularVelocity = Vector3.zero;
         
     }
-
+    public override void Initialize()
+    {
+        base.Initialize();
+        agentRigibody = this.gameObject.AddComponent<Rigidbody>();
+        this.gameObject.AddComponent<BoxCollider>();
+        env = FindObjectOfType<MazeAcademy>();
+        bp = GetComponent<BehaviorParameters>();
+        dr = GetComponent<DecisionRequester>();
+        raySensor = GetComponent<RayPerceptionSensorComponent3D>();
+        setRigibody();
+        //setLearningParams();
+    }
     public override void OnEpisodeBegin()
     {
+        base.OnEpisodeBegin();
+
         ResetEnvironment();
 
         //transform.localPosition = new Vector3(Random.Range(-3.5f,-1.5f), 0.56f, Random.Range(-3.5f, 3.5f));
@@ -80,6 +128,8 @@ public class MazeAI : Agent
     //Metoda do okreslenia jakich akcji ma sie podjac AI by osiagnac cel
     public override void OnActionReceived(ActionBuffers actions)
     {
+        
+
         float forwardAmount = 0f; //ruch przod tyl
         float turnAmount = 0f; //skret
 
