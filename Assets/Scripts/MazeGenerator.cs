@@ -20,7 +20,7 @@ public class MazeGenerator : MonoBehaviour
     {
         List<MazeNode> nodes = new List<MazeNode>();
 
-        Instantiate(floorGameObject, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity).transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
+        Instantiate(floorGameObject, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform).transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
 
         for (int x = 0; x < size.x; x++)
         {
@@ -48,8 +48,8 @@ public class MazeGenerator : MonoBehaviour
         while (EndNode == StartNode);
 
         //Spawn punktow do respu i celu
-        Instantiate(SpawnPoint, StartNode.transform.position, Quaternion.identity);
-        Instantiate(Target, EndNode.transform.position, Quaternion.identity);
+        Instantiate(SpawnPoint, StartNode.transform.position, Quaternion.identity, transform);
+        Instantiate(Target, EndNode.transform.position, Quaternion.identity, transform);
 
         currentPath.Add(StartNode);
 
