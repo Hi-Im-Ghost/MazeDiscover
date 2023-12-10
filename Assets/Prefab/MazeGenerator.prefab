@@ -46,5 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 7949031193750702626, guid: f19030998a896f044a422cf660bb195c,
     type: 3}
+  floorGameObject: {fileID: 866063272103174609, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
+    type: 3}
   mazeSize: {x: 10, y: 10}
-  nodeSize: 1
