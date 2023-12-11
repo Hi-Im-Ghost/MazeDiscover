@@ -5,22 +5,39 @@ using UnityEngine;
 public class MazeGenerator : MonoBehaviour
 {
     [SerializeField] MazeNode nodePrefab;
-    [SerializeField] GameObject floorGameObject;
-    [SerializeField] GameObject SpawnPoint;
-    [SerializeField] GameObject Target;
+    [SerializeField] GameObject floorGameObjectPrefab;
+    [SerializeField] GameObject SpawnPointPrefab;
+    [SerializeField] GameObject targetPrefab;
+    [SerializeField] GameObject agentPrefab;
     [SerializeField] Vector2Int mazeSize;
     [SerializeField] int mazeScale;
+
+    GameObject spawnPointInstance;
+    GameObject agentInst;
+    GameObject targetInst;
+    GameObject floorInst;
+    MazeAcademy mazeAcademy;
 
     private void Start() //W tym miejscu trzeba zamienic zeby zamiast podczas startu to generowalo sie podczas wcisniecia przycisku 
     {
         GenerateMazeInstant(mazeSize);
+
+        mazeAcademy = GetComponent<MazeAcademy>();
+        mazeAcademy.SetFloorGameObject(floorInst);
+        agentInst = Instantiate(agentPrefab, spawnPointInstance.transform.position, Quaternion.identity, transform);
+        mazeAcademy.SetAgentTransform(agentInst.transform);
+        mazeAcademy.SetTargetTransform(targetInst.transform);
+
+
     }
 
     void GenerateMazeInstant(Vector2Int size)
     {
         List<MazeNode> nodes = new List<MazeNode>();
 
-        Instantiate(floorGameObject, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform).transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
+        floorInst = Instantiate(floorGameObjectPrefab, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform);
+        floorInst.transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
+        
 
         for (int x = 0; x < size.x; x++)
         {
@@ -48,8 +65,9 @@ public class MazeGenerator : MonoBehaviour
         while (EndNode == StartNode);
 
         //Spawn punktow do respu i celu
-        Instantiate(SpawnPoint, StartNode.transform.position, Quaternion.identity, transform);
-        Instantiate(Target, EndNode.transform.position, Quaternion.identity, transform);
+        spawnPointInstance = Instantiate(SpawnPointPrefab, StartNode.transform.position, Quaternion.identity, transform);
+        targetInst = Instantiate(targetPrefab, EndNode.transform.position, Quaternion.identity, transform);
+
 
         currentPath.Add(StartNode);
 

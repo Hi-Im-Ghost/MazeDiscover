@@ -85,8 +85,6 @@ public class MazeAI : Agent
 
         ResetEnvironment();
 
-        //transform.localPosition = new Vector3(Random.Range(-3.5f,-1.5f), 0.56f, Random.Range(-3.5f, 3.5f));
-
         actualDistanceToTarget = StartDistanceToTarget;
     }
     // Metoda do okreslenia celu jaki ma osiagnac AI
@@ -105,14 +103,14 @@ public class MazeAI : Agent
         {
             bestDistanceToTarget = actualDistanceToTarget;
             // Nagroda za poprawê najlepszego dystansu
-            AddReward(0.05f);
+            AddReward(0.01f);
         }
         
         // Poprawa dystansu
         if (actualDistanceToTarget < StartDistanceToTarget)
         {
             // Nagroda za poprawe sytuacji
-            AddReward(0.005f);
+            AddReward(0.001f);
         }
 
         // Sprawdzenie czy nie przekroczono maksymalnej ilosci akcji
@@ -153,7 +151,7 @@ public class MazeAI : Agent
         transform.localPosition += transform.forward * forwardAmount * Time.fixedDeltaTime * env.GetMovementSpeed();
 
 
-        actualDistanceToTarget =env.GetDistanceToTarget();
+        actualDistanceToTarget = env.GetDistanceToTarget();
 
         CalculateRewards();
 

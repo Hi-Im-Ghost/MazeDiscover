@@ -1862,27 +1862,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16a81023781717e44bb035c59c937665, type: 3}
---- !u!1 &2129012847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4365149456981720425, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-    type: 3}
-  m_PrefabInstance: {fileID: 2518482594317146730}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2129012851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129012847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63a1228cff9a7a7418746b70578ba783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  floorGameObject: {fileID: 866063272103174609, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
-    type: 3}
-  movementSpeed: 5
 --- !u!1001 &2518482594317146730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1899,7 +1878,7 @@ PrefabInstance:
     - target: {fileID: 1134034973266225435, guid: 06d1edeeaedd45e4f85c0b028874caa9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 26.32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1134034973266225435, guid: 06d1edeeaedd45e4f85c0b028874caa9,
         type: 3}
@@ -1946,59 +1925,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MazeGenerator
       objectReference: {fileID: 0}
-    - target: {fileID: 4365149456981720425, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: floor
-      value: 
-      objectReference: {fileID: 6510117898932231904, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
-        type: 3}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: Target
-      value: 
-      objectReference: {fileID: 1199372953855368191, guid: 19bd959f61aa23342aad9042e9465945,
-        type: 3}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: mazeScale
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: SpawnPoint
-      value: 
-      objectReference: {fileID: 6950862727595719436, guid: 30b692cbf81cd2d46a23e652030a7e22,
-        type: 3}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: mazeSize.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: mazeSize.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6732018407773886691, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      propertyPath: floorGameObject
-      value: 
-      objectReference: {fileID: 866063272103174609, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
-        type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 8535832286510058303, guid: 06d1edeeaedd45e4f85c0b028874caa9, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4365149456981720425, guid: 06d1edeeaedd45e4f85c0b028874caa9,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2129012851}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06d1edeeaedd45e4f85c0b028874caa9, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

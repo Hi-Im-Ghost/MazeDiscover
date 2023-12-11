@@ -11,24 +11,37 @@ public class MazeAcademy : MonoBehaviour
     private Transform agent;
     private Renderer[] floors;
     private Color prevColors;
-
-    [SerializeField] GameObject floorGameObject;
+    private GameObject floorGameObject;
     [SerializeField] float movementSpeed = 5.0f;
 
     private void Start()
-    {
-        floors = floorGameObject.GetComponentsInChildren<Renderer>();
-        prevColors = floorGameObject.GetComponentInChildren<Renderer>().material.color;
-        target = GameObject.FindGameObjectWithTag("Target").GetComponent<Transform>();
-        agent = GameObject.FindGameObjectWithTag("Agent").GetComponent<Transform>();
-
+    { 
+        //target = GameObject.FindGameObjectWithTag("Target").GetComponent<Transform>();
+        //agent = GameObject.FindGameObjectWithTag("Agent").GetComponent<Transform>();
     }
 
     public (Vector3 position, Quaternion rotation) GetStartPosition()
     {
-        Vector3 startPosition = new Vector3(Random.Range(-3.5f, -1.5f), 0.56f, Random.Range(-3.5f, 3.5f));
+        Vector3 startPosition = agent.position;
         Quaternion startRotation = Quaternion.identity; 
         return (startPosition, startRotation);
+    }
+
+    public void SetFloorGameObject(GameObject floor)
+    {
+        this.floorGameObject = floor;
+        this.floors = floorGameObject.GetComponentsInChildren<Renderer>();
+        prevColors = floorGameObject.GetComponentInChildren<Renderer>().material.color;
+    }
+    public void SetAgentTransform(Transform agent_object)
+    {
+        this.agent = agent_object;
+        
+    }
+
+    public void SetTargetTransform(Transform target_object)
+    {
+        this.target = target_object;
     }
 
     public Vector3 GetTargetPosition()

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1134034973266225435}
   - component: {fileID: 6732018407773886691}
+  - component: {fileID: 5914052317861779547}
   m_Layer: 0
   m_Name: MazeGenerator
   m_TagString: Untagged
@@ -46,6 +47,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 7949031193750702626, guid: f19030998a896f044a422cf660bb195c,
     type: 3}
-  floorGameObject: {fileID: 866063272103174609, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
+  floorGameObjectPrefab: {fileID: 866063272103174609, guid: 52eb448d345d8cf4e9b4ba78fdf90754,
     type: 3}
-  mazeSize: {x: 10, y: 10}
+  SpawnPointPrefab: {fileID: 6950862727595719436, guid: 30b692cbf81cd2d46a23e652030a7e22,
+    type: 3}
+  targetPrefab: {fileID: 1199372953855368191, guid: 19bd959f61aa23342aad9042e9465945,
+    type: 3}
+  agentPrefab: {fileID: 5335727770969730457, guid: 7cb656a313da1644487dbf78db4cef34,
+    type: 3}
+  mazeSize: {x: 3, y: 3}
+  mazeScale: 4
+--- !u!114 &5914052317861779547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4365149456981720425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a1228cff9a7a7418746b70578ba783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 5
