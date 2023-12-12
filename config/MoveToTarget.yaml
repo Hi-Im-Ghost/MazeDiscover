@@ -26,17 +26,6 @@ behaviors:
         gamma: 0.99 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
         learning_rate: 0.0003
         encoding_size: 64 #rozmiar warstwy ukrytej (mniejsza - czesciej bedzie probowal cos nowego)
-      gail: #uczenie przez nasladownictwo (proba pokonania nauczyciela/zachowania podobnego)
-        gamma: 0.9 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
-        strength: 0.2 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
-        learning_rate: 0.0003
-        use_actions: false
-        use_vail: false
-        demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
-    behavioral_cloning: #sekcja okreslajaca jak bardzo ma kopiowac to co robi nauczyciel (nie probuje pokonac go) 
-      strength: 0.5 #parametr okresla jak bardzo chcemy by ai nauczylo zachowywac sie jak demonstrator
-      steps: 100000 #liczba krokow wykonywana podczas procesu uczenia (jak cos trudnego to zwiekszyc)
-      demo_path: Demos/MoveDemo.demo #sciezka do pliku demo
     keep_checkpoints: 5 #liczba punktow kontrolnych modelu do zachowania
     max_steps: 50000000 #maksymalna wartosc dzialania agenta podczas szkolenia
     time_horizon: 128 #ile doswiadczenia ma zebrac zanim doda do bufora

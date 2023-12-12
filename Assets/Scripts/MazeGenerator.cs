@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MazeGenerator : MonoBehaviour
@@ -8,36 +9,37 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] GameObject floorGameObjectPrefab;
     [SerializeField] GameObject SpawnPointPrefab;
     [SerializeField] GameObject targetPrefab;
-    [SerializeField] GameObject agentPrefab;
+
     [SerializeField] Vector2Int mazeSize;
     [SerializeField] int mazeScale;
 
-    GameObject spawnPointInstance;
-    GameObject agentInst;
+    GameObject spawnPointInst;
     GameObject targetInst;
     GameObject floorInst;
     MazeAcademy mazeAcademy;
 
     private void Start() //W tym miejscu trzeba zamienic zeby zamiast podczas startu to generowalo sie podczas wcisniecia przycisku 
     {
-        GenerateMazeInstant(mazeSize);
-
         mazeAcademy = GetComponent<MazeAcademy>();
+        GenerateNewMaze();
+    }
+
+    void setupAcademy()
+    {
         mazeAcademy.SetFloorGameObject(floorInst);
-        agentInst = Instantiate(agentPrefab, spawnPointInstance.transform.position, Quaternion.identity, transform);
-        mazeAcademy.SetAgentTransform(agentInst.transform);
+        mazeAcademy.setStartPosition(spawnPointInst.transform);
         mazeAcademy.SetTargetTransform(targetInst.transform);
-
-
     }
 
     void GenerateMazeInstant(Vector2Int size)
     {
-        List<MazeNode> nodes = new List<MazeNode>();
 
+        DestroyOldMaze();
+
+        List<MazeNode> nodes = new List<MazeNode>();
         floorInst = Instantiate(floorGameObjectPrefab, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform);
         floorInst.transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
-        
+
 
         for (int x = 0; x < size.x; x++)
         {
@@ -45,7 +47,7 @@ public class MazeGenerator : MonoBehaviour
             {
                 Vector3 nodePos = new Vector3(x - ((size.x) / 2f), 0, y - ((size.y) / 2f)) * mazeScale;
                 MazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
-                newNode.transform.localScale = newNode.transform.localScale * mazeScale; 
+                newNode.transform.localScale = newNode.transform.localScale * mazeScale;
                 nodes.Add(newNode);
             }
         }
@@ -65,7 +67,7 @@ public class MazeGenerator : MonoBehaviour
         while (EndNode == StartNode);
 
         //Spawn punktow do respu i celu
-        spawnPointInstance = Instantiate(SpawnPointPrefab, StartNode.transform.position, Quaternion.identity, transform);
+        spawnPointInst = Instantiate(SpawnPointPrefab, StartNode.transform.position, Quaternion.identity, transform);
         targetInst = Instantiate(targetPrefab, EndNode.transform.position, Quaternion.identity, transform);
 
 
@@ -157,6 +159,20 @@ public class MazeGenerator : MonoBehaviour
                 currentPath.RemoveAt(currentPath.Count - 1);
             }
         }
+        
     }
 
+    public void GenerateNewMaze()
+    {
+        GenerateMazeInstant(mazeSize);
+        setupAcademy();
+    }
+
+    void DestroyOldMaze()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

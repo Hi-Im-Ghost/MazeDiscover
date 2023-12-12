@@ -56,7 +56,7 @@ public class MazeAI : Agent
     }
 
     // Metoda do resetowania srodowiska szkoleniowego
-    private void ResetEnvironment()
+    private void ResetAgent()
     {
         var start = env.GetStartPosition();
         StartDistanceToTarget = env.GetDistanceToTarget();
@@ -83,7 +83,7 @@ public class MazeAI : Agent
     {
         base.OnEpisodeBegin();
 
-        ResetEnvironment();
+        ResetAgent();
 
         actualDistanceToTarget = StartDistanceToTarget;
     }

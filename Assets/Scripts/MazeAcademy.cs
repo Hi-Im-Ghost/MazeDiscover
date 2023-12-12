@@ -7,22 +7,28 @@ using System.Linq;
 public class MazeAcademy : MonoBehaviour
 {
 
-    private Transform target;
-    private Transform agent;
+    private Transform targetTransform;
+    private Transform agentTransform;
+    private Transform spawnPoint;
+
     private Renderer[] floors;
     private Color prevColors;
+
     private GameObject floorGameObject;
+    private GameObject agentInst;
+
+
+    [SerializeField] GameObject agentPrefab;
     [SerializeField] float movementSpeed = 5.0f;
 
     private void Start()
-    { 
-        //target = GameObject.FindGameObjectWithTag("Target").GetComponent<Transform>();
-        //agent = GameObject.FindGameObjectWithTag("Agent").GetComponent<Transform>();
+    {
+
     }
 
     public (Vector3 position, Quaternion rotation) GetStartPosition()
     {
-        Vector3 startPosition = agent.position;
+        Vector3 startPosition = spawnPoint.localPosition;
         Quaternion startRotation = Quaternion.identity; 
         return (startPosition, startRotation);
     }
@@ -33,25 +39,31 @@ public class MazeAcademy : MonoBehaviour
         this.floors = floorGameObject.GetComponentsInChildren<Renderer>();
         prevColors = floorGameObject.GetComponentInChildren<Renderer>().material.color;
     }
-    public void SetAgentTransform(Transform agent_object)
+    public void setStartPosition(Transform startPoint)
     {
-        this.agent = agent_object;
+        this.spawnPoint = startPoint;
+        agentInst = Instantiate(agentPrefab, spawnPoint.transform.localPosition, Quaternion.identity, transform);
+        SetAgentTransform(agentInst.transform);
+    }
+    public void SetAgentTransform(Transform agentObject)
+    {
+        this.agentTransform = agentObject;
         
     }
 
-    public void SetTargetTransform(Transform target_object)
+    public void SetTargetTransform(Transform targetObject)
     {
-        this.target = target_object;
+        this.targetTransform = targetObject;
     }
 
     public Vector3 GetTargetPosition()
     {
-        return target.localPosition;
+        return targetTransform.localPosition;
     }
 
     public float GetDistanceToTarget()
     {
-        return Vector3.Distance(agent.localPosition, target.localPosition);
+        return Vector3.Distance(agentTransform.localPosition, targetTransform.localPosition);
     }
 
     public float GetMovementSpeed() { return movementSpeed; }
@@ -86,11 +98,14 @@ public class MazeAcademy : MonoBehaviour
             t.material.color = color;
         }
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         for (int i = 0; i < floors.Count(); i++)
         {
             floors[i].material.color = prevColors;
         }
+
+        FindObjectOfType<MazeGenerator>().GenerateNewMaze();
+
     }
 }

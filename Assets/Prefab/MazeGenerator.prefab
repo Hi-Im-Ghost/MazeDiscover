@@ -53,8 +53,6 @@ MonoBehaviour:
     type: 3}
   targetPrefab: {fileID: 1199372953855368191, guid: 19bd959f61aa23342aad9042e9465945,
     type: 3}
-  agentPrefab: {fileID: 5335727770969730457, guid: 7cb656a313da1644487dbf78db4cef34,
-    type: 3}
   mazeSize: {x: 3, y: 3}
   mazeScale: 4
 --- !u!114 &5914052317861779547
@@ -69,4 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63a1228cff9a7a7418746b70578ba783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentPrefab: {fileID: 5335727770969730457, guid: 7cb656a313da1644487dbf78db4cef34,
+    type: 3}
   movementSpeed: 5
