@@ -17,7 +17,6 @@ public class MazeAcademy : MonoBehaviour
     private GameObject floorGameObject;
     private GameObject agentInst;
 
-
     [SerializeField] GameObject agentPrefab;
     [SerializeField] float movementSpeed = 5.0f;
 
@@ -26,6 +25,12 @@ public class MazeAcademy : MonoBehaviour
 
     }
 
+    public void generateAgent()
+    {
+        agentInst = Instantiate(agentPrefab, spawnPoint.transform.localPosition, Quaternion.identity, transform);
+        SetAgentTransform(agentInst.transform);
+        prevColors = agentInst.GetComponentInChildren<Renderer>().material.color;
+    }
     public (Vector3 position, Quaternion rotation) GetStartPosition()
     {
         Vector3 startPosition = spawnPoint.localPosition;
@@ -42,8 +47,6 @@ public class MazeAcademy : MonoBehaviour
     public void setStartPosition(Transform startPoint)
     {
         this.spawnPoint = startPoint;
-        agentInst = Instantiate(agentPrefab, spawnPoint.transform.localPosition, Quaternion.identity, transform);
-        SetAgentTransform(agentInst.transform);
     }
     public void SetAgentTransform(Transform agentObject)
     {
@@ -68,9 +71,10 @@ public class MazeAcademy : MonoBehaviour
 
     public float GetMovementSpeed() { return movementSpeed; }
 
+
     public void OnEpisodeEnd(string reason)
     {
-        switch(reason)
+        switch (reason)
         {
             case "target":
                 {
@@ -93,19 +97,22 @@ public class MazeAcademy : MonoBehaviour
 
     IEnumerator ChangeColorBg(Color color)
     {
-        foreach (Renderer t in floors)
-        {
-            t.material.color = color;
-        }
+        //foreach (Renderer t in floors)
+        //{
+        //    t.material.color = color;
+        //}
 
-        yield return new WaitForSeconds(0.1f);
+        //yield return new WaitForSeconds(0.1f);
 
-        for (int i = 0; i < floors.Count(); i++)
-        {
-            floors[i].material.color = prevColors;
-        }
+        //for (int i = 0; i < floors.Count(); i++)
+        //{
+        //    floors[i].material.color = prevColors;
+        //}  
 
-        FindObjectOfType<MazeGenerator>().GenerateNewMaze();
+        agentInst.GetComponentInChildren<Renderer>().material.color = color;
+        yield return new WaitForSeconds(0.4f);
+        agentInst.GetComponentInChildren<Renderer>().material.color = prevColors;
+
 
     }
 }

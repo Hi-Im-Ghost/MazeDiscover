@@ -81,11 +81,15 @@ public class MazeAI : Agent
     }
     public override void OnEpisodeBegin()
     {
+            
         base.OnEpisodeBegin();
+
+        FindObjectOfType<MazeGenerator>().GenerateNewMaze();
 
         ResetAgent();
 
         actualDistanceToTarget = StartDistanceToTarget;
+
     }
     // Metoda do okreslenia celu jaki ma osiagnac AI
 
@@ -185,7 +189,7 @@ public class MazeAI : Agent
 
 
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
