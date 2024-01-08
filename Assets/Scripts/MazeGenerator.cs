@@ -16,7 +16,6 @@ public class MazeGenerator : MonoBehaviour
 
     GameObject spawnPointInst;
     GameObject targetInst;
-    //GameObject floorInst;
     MazeAcademy mazeAcademy;
 
     private void Start() //W tym miejscu trzeba zamienic zeby zamiast podczas startu to generowalo sie podczas wcisniecia przycisku 
@@ -28,7 +27,6 @@ public class MazeGenerator : MonoBehaviour
 
     void setupAcademy()
     {    
-        //mazeAcademy.SetFloorGameObject(floorInst);
         mazeAcademy.setStartPosition(spawnPointInst.transform);
         mazeAcademy.SetTargetTransform(targetInst.transform);
     }
@@ -36,8 +34,6 @@ public class MazeGenerator : MonoBehaviour
     void GenerateMazeInstant(Vector2Int size)
     {
         List<MazeNode> nodes = new List<MazeNode>();
-        //floorInst = Instantiate(floorGameObjectPrefab, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform);
-        //floorInst.transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
         Instantiate(floorGameObjectPrefab, new Vector3(-0.5f, -0.5f, -0.5f) * mazeScale, Quaternion.identity, transform).transform.localScale = new Vector3(size.x, 0.1f, size.y) * mazeScale;
 
         for (int x = 0; x < size.x; x++)

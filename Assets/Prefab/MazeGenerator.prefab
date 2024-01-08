@@ -53,7 +53,7 @@ MonoBehaviour:
     type: 3}
   targetPrefab: {fileID: 1199372953855368191, guid: 19bd959f61aa23342aad9042e9465945,
     type: 3}
-  mazeSize: {x: 3, y: 3}
+  mazeSize: {x: 5, y: 5}
   mazeScale: 4
 --- !u!114 &5914052317861779547
 MonoBehaviour:

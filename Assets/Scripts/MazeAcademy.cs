@@ -3,6 +3,7 @@ using Unity.MLAgents;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 public class MazeAcademy : MonoBehaviour
 {
@@ -11,14 +12,13 @@ public class MazeAcademy : MonoBehaviour
     private Transform agentTransform;
     private Transform spawnPoint;
 
-    private Renderer[] floors;
     private Color prevColors;
-
-    private GameObject floorGameObject;
+    private SuccessCounter counter;
     private GameObject agentInst;
 
     [SerializeField] GameObject agentPrefab;
     [SerializeField] float movementSpeed = 5.0f;
+
 
     private void Start()
     {
@@ -30,6 +30,7 @@ public class MazeAcademy : MonoBehaviour
         agentInst = Instantiate(agentPrefab, spawnPoint.transform.localPosition, Quaternion.identity, transform);
         SetAgentTransform(agentInst.transform);
         prevColors = agentInst.GetComponentInChildren<Renderer>().material.color;
+        counter = FindObjectOfType<SuccessCounter>();
     }
     public (Vector3 position, Quaternion rotation) GetStartPosition()
     {
@@ -38,12 +39,7 @@ public class MazeAcademy : MonoBehaviour
         return (startPosition, startRotation);
     }
 
-    public void SetFloorGameObject(GameObject floor)
-    {
-        this.floorGameObject = floor;
-        this.floors = floorGameObject.GetComponentsInChildren<Renderer>();
-        prevColors = floorGameObject.GetComponentInChildren<Renderer>().material.color;
-    }
+
     public void setStartPosition(Transform startPoint)
     {
         this.spawnPoint = startPoint;
@@ -79,16 +75,19 @@ public class MazeAcademy : MonoBehaviour
             case "target":
                 {
                     StartCoroutine("ChangeColorBg", Color.green);
+                    counter.IncrementSuccessCount();
                 }
                 break;
             case "hit":
                 {
                     StartCoroutine("ChangeColorBg", Color.red);
+                    counter.IncrementFailureCount();
                 }
                 break;
             case "time":
                 {
                     StartCoroutine("ChangeColorBg", Color.yellow);
+                    counter.IncrementTimeoutCount();
                 }
                 break;
         }
@@ -97,18 +96,6 @@ public class MazeAcademy : MonoBehaviour
 
     IEnumerator ChangeColorBg(Color color)
     {
-        //foreach (Renderer t in floors)
-        //{
-        //    t.material.color = color;
-        //}
-
-        //yield return new WaitForSeconds(0.1f);
-
-        //for (int i = 0; i < floors.Count(); i++)
-        //{
-        //    floors[i].material.color = prevColors;
-        //}  
-
         agentInst.GetComponentInChildren<Renderer>().material.color = color;
         yield return new WaitForSeconds(0.4f);
         agentInst.GetComponentInChildren<Renderer>().material.color = prevColors;

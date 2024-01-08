@@ -11,6 +11,7 @@ public class MazeAI : Agent
 {
     MazeAcademy env;
 
+    private TrailRenderer trailRenderer;
     private Rigidbody agentRigibody;
     private float StartDistanceToTarget = 0f;
     private float actualDistanceToTarget = 0f;
@@ -55,7 +56,7 @@ public class MazeAI : Agent
         agentRigibody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
-    // Metoda do resetowania srodowiska szkoleniowego
+    // Metoda do resetowania agenta
     private void ResetAgent()
     {
         var start = env.GetStartPosition();
@@ -65,11 +66,13 @@ public class MazeAI : Agent
         transform.localRotation = start.rotation;
         agentRigibody.velocity = Vector3.zero;
         agentRigibody.angularVelocity = Vector3.zero;
-        
+        ResetTrail();
+
     }
     public override void Initialize()
     {
         base.Initialize();
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
         agentRigibody = this.gameObject.AddComponent<Rigidbody>();
         this.gameObject.AddComponent<BoxCollider>();
         env = FindObjectOfType<MazeAcademy>();
@@ -107,14 +110,14 @@ public class MazeAI : Agent
         {
             bestDistanceToTarget = actualDistanceToTarget;
             // Nagroda za poprawê najlepszego dystansu
-            AddReward(0.01f);
+            AddReward(0.006f);
         }
         
         // Poprawa dystansu
         if (actualDistanceToTarget < StartDistanceToTarget)
         {
             // Nagroda za poprawe sytuacji
-            AddReward(0.001f);
+            AddReward(0.0008f);
         }
 
         // Sprawdzenie czy nie przekroczono maksymalnej ilosci akcji
@@ -189,9 +192,26 @@ public class MazeAI : Agent
 
 
     }
-    
+    // Metoda do resetowania œladu 
+    private void ResetTrail()
+    {
+        trailRenderer.Clear();
+        trailRenderer.enabled = true;
+    }
     private void OnCollisionEnter(Collision collision)
     {
+
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        Debug.Log(collision.transform.name);
+        if (collision.gameObject.CompareTag("Target"))
+        {
+            AddReward(1f);
+            env.OnEpisodeEnd("target");
+            EndEpisode();
+        }
         if (collision.gameObject.CompareTag("Wall"))
         {
             AddReward(-1f);
@@ -201,14 +221,9 @@ public class MazeAI : Agent
         }
     }
 
-    private void OnTriggerEnter(Collider collision)
+    void OnCollisionExit(Collision collisionInfo)
     {
-        if (collision.gameObject.CompareTag("Target"))
-        {
-            AddReward(1f);
-            env.OnEpisodeEnd("target");
-            EndEpisode();
-        }
+        print("Collision Out: " + gameObject.name);
     }
 }
 
