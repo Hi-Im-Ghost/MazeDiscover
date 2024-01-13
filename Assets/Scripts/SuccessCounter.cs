@@ -2,18 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SuccessCounter : MonoBehaviour
 {
+    public delegate void IntValueUpdatedEventHandler(int value1, int value2);
+    public static event IntValueUpdatedEventHandler OnIntValueUpdated;
+
     [SerializeField] TMP_Text wrongText;
     [SerializeField] TMP_Text timeText;
     [SerializeField] TMP_Text goodText;
+    [SerializeField] Button myButton;
+
     private int successCount = 0;
     private int failureCount = 0;
     private int timeoutCount = 0;
 
+    int ValX;
+    int ValY;
+
     private void Start()
     {
+        // Dodajemy funkcjê, która zostanie wywo³ana po naciœniêciu przycisku
+        myButton.onClick.AddListener(ButtonClick);
+
         // Sprawdzenie czy sa komponenty 
         if (goodText == null || wrongText == null || timeText == null)
         {
@@ -23,6 +35,24 @@ public class SuccessCounter : MonoBehaviour
         {
             UpdateCountersText();
         }
+    }
+
+    public void GetValX(string value1)
+    {
+        if(int.TryParse(value1, out int newvalue1))
+        {
+            ValX = newvalue1;
+        }
+
+    }
+    
+    public void GetValY(string value2)
+    {
+        if (int.TryParse(value2, out int newvalue2))
+        {
+            ValY = newvalue2;
+        }
+        
     }
 
     // Metoda do aktualizacji tekstu
@@ -52,6 +82,15 @@ public class SuccessCounter : MonoBehaviour
     {
         timeoutCount++;
         UpdateCountersText();
+    }
+
+    void ButtonClick()
+    {
+       
+        if (OnIntValueUpdated != null)
+        {
+            OnIntValueUpdated(ValX, ValY);
+        }
     }
 }
 

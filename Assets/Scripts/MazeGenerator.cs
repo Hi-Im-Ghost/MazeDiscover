@@ -14,15 +14,26 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] Vector2Int mazeSize;
     [SerializeField] int mazeScale;
 
+    private int przechowywanaWartosc1;
+    private int przechowywanaWartosc2;
+
     GameObject spawnPointInst;
     GameObject targetInst;
     MazeAcademy mazeAcademy;
 
-    private void Start() //W tym miejscu trzeba zamienic zeby zamiast podczas startu to generowalo sie podczas wcisniecia przycisku 
+    private void Start()
     {
         mazeAcademy = GetComponent<MazeAcademy>();
         GenerateNewMaze();
         mazeAcademy.generateAgent();
+        SuccessCounter.OnIntValueUpdated += HandleIntValueUpdated;
+    }
+
+    void HandleIntValueUpdated(int value1, int value2)
+    {
+        mazeSize.x = value1;
+        mazeSize.y = value2;
+
     }
 
     void setupAcademy()
