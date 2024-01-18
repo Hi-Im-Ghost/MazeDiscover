@@ -98,7 +98,7 @@ public class MazeAI : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation((Vector3)this.transform.localPosition); //pozycja AI
+        sensor.AddObservation(this.transform.localPosition); //pozycja AI
         sensor.AddObservation(env.GetTargetPosition()); //pozycja celu
     }
 
@@ -117,13 +117,15 @@ public class MazeAI : Agent
         if (actualDistanceToTarget < StartDistanceToTarget)
         {
             // Nagroda za poprawe sytuacji
-            AddReward(0.0008f);
+            AddReward(0.0006f);
         }
 
         // Sprawdzenie czy nie przekroczono maksymalnej ilosci akcji
         if (StepCount >= MaxStep)
         {
             env.OnEpisodeEnd("time");
+            SetReward(-1f);
+            EndEpisode();
         }
 
         // Kary za d³ugotrwale dzia³ania
@@ -198,32 +200,22 @@ public class MazeAI : Agent
         trailRenderer.Clear();
         trailRenderer.enabled = true;
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-
-    }
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log(collision.transform.name);
         if (collision.gameObject.CompareTag("Target"))
         {
-            AddReward(1f);
+            AddReward(2f); //do 5x5 bylo 1
             env.OnEpisodeEnd("target");
             EndEpisode();
         }
         if (collision.gameObject.CompareTag("Wall"))
         {
-            AddReward(-1f);
+            SetReward(-1f);
             env.OnEpisodeEnd("hit");
             EndEpisode();
 
         }
-    }
-
-    void OnCollisionExit(Collision collisionInfo)
-    {
-        print("Collision Out: " + gameObject.name);
     }
 }
 

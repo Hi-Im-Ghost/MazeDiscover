@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5941348940062071269}
   - component: {fileID: 1235409406923984768}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Target
   m_TagString: Target
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1276108738322504968}
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 1276108738322504968}
   - component: {fileID: 3318608985507751666}
   - component: {fileID: 8132502242897225781}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Target
   m_Icon: {fileID: 0}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -29,6 +30,13 @@ public class MazeGenerator : MonoBehaviour
         SuccessCounter.OnIntValueUpdated += HandleIntValueUpdated;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Quit();
+        }
+    }
     void HandleIntValueUpdated(int value1, int value2)
     {
         mazeSize.x = value1;
@@ -184,5 +192,15 @@ public class MazeGenerator : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void ResetMaze()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);   
     }
 }
