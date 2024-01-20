@@ -2,19 +2,19 @@ behaviors:
   MoveToTarget:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 512 #256 do 5x5 #rozmiar uzywanego doswiadczenia w kazdej iteracji 
-      buffer_size: 20480 #10240 do 5x5 #doswiadczenie do zebrania przed aktaulizacja modelu (wieksza wartosc - bardziej stabilne) 
+      batch_size: 512 #rozmiar uzywanego doswiadczenia w kazdej iteracji 
+      buffer_size: 20480 #doswiadczenie do zebrania przed aktaulizacja modelu (wieksza wartosc - bardziej stabilne) 
       learning_rate: 0.0003 #poczatkowa szybkosc uczenia sie 
       beta: 0.005 #intensywnosc regulacja entropi 
       epsilon: 0.2 #dopuszczalny prog rozbieznosci miedzy stara a nowa polityka schodzenia gradientowego (nizsza - stabilne ale wolne uczenie)
       lambd: 0.95 #zaleznosc od nagrod srodowiska 
-      num_epoch: 3 #5 do 5x5 #liczba zejsc gradientu do bufora (mniejsza - bardziej stabilny ale wolniejsze)
+      num_epoch: 3 #liczba zejsc gradientu do bufora (mniejsza - bardziej stabilny ale wolniejsze)
       learning_rate_schedule: linear #okreslenie jak zmienia sie szybkosc uczenia w czasie
       beta_schedule: constant
       epsilon_schedule: linear
     network_settings:
       normalize: false #jak dyskretne akcje to powinno sie uzywac false
-      hidden_units: 512 #128 do 5x5 #liczba jednostek znajdujacych sie w warstwie sieci nueronowej 
+      hidden_units: 512 #liczba jednostek znajdujacych sie w warstwie sieci nueronowej 
       num_layers: 3 #liczba ukrytych warstw w sieci neuronowej 
       vis_encode_type: simple #typ kodera do kodowania obserwacji 
     reward_signals:
@@ -22,10 +22,10 @@ behaviors:
         gamma: 0.99 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
         strength: 1.0
       curiosity: #wewnetrzna ciekawosc
-        strength: 0.02 #0.01 do rozmiaru 5x5 #wielkosc nagrody generowanej przez ten modul
+        strength: 0.02 #wielkosc nagrody generowanej przez ten modul
         gamma: 0.99 #jak daleko w przyszłość agent powinien dbac o możliwe nagrody (jak przyszlosc to duza wartosc)
         network_settings:
-            encoding_size: 128 #wczesniej 64 #rozmiar warstwy ukrytej (mniejsza - czesciej bedzie probowal cos nowego)
+            encoding_size: 128 #rozmiar warstwy ukrytej (mniejsza - czesciej bedzie probowal cos nowego)
         learning_rate: 0.0003  
     keep_checkpoints: 5 #liczba punktow kontrolnych modelu do zachowania
     max_steps: 50000000 #maksymalna wartosc dzialania agenta podczas szkolenia

@@ -20,6 +20,7 @@ public class MazeAI : Agent
     private DecisionRequester dr;
     private RayPerceptionSensorComponent3D raySensor;
 
+    // Metoda do ustawiania parametrów uczenia
     private void setLearningParams()
     {
         // BEHAVIOR PARAMETERS
@@ -48,10 +49,12 @@ public class MazeAI : Agent
         raySensor.EndVerticalOffset = 0;
 
     }
-
+    // Metoda do ustawienia komponentu Rigibody
     private void setRigibody()
     {
+        // Wy³¹czenie grawitacji
         agentRigibody.useGravity = false;
+        // Zablokowanie poruszania i rotacji wzd³ó¿ danej wspó³rzednej
         agentRigibody.constraints = RigidbodyConstraints.FreezePositionY;
         agentRigibody.constraints = RigidbodyConstraints.FreezeRotation;
     }
@@ -59,43 +62,60 @@ public class MazeAI : Agent
     // Metoda do resetowania agenta
     private void ResetAgent()
     {
+        // Zapisanie w zmienna zwracana pozycje startowa agenta
         var start = env.GetStartPosition();
+        // Zapisanie w zmienna zwracany dystans do celu
         StartDistanceToTarget = env.GetDistanceToTarget();
-
+        // Ustawienie pozycji 
         transform.localPosition = start.position;
+        // Ustawienie rotacji
         transform.localRotation = start.rotation;
+        // Ustawienie prêdkoœci
         agentRigibody.velocity = Vector3.zero;
+        // Ustawienie predkosci katowej
         agentRigibody.angularVelocity = Vector3.zero;
+        // Zresetowanie pozostawianego œladu
         ResetTrail();
-
     }
+    // Metoda wywo³ywana podczas inicjalizacji
     public override void Initialize()
     {
+        // Wywo³aj metode bazowa
         base.Initialize();
+        // Pobierz komponent TrailRenderer i zapisz w zmienn¹
         trailRenderer = GetComponentInChildren<TrailRenderer>();
+        // Pobierz komponent Rigibody i zapisz w zmienn¹
         agentRigibody = this.gameObject.AddComponent<Rigidbody>();
+        // Dodaj do tego obiektu komponent BoxColider
         this.gameObject.AddComponent<BoxCollider>();
+        // Znajdz obiekt typu MazeAcademy i zapisz do zmiennej
         env = FindObjectOfType<MazeAcademy>();
+        // Zapisz do zmiennej komponent BehaviorParameters
         bp = GetComponent<BehaviorParameters>();
+        // Zapisz do zmiennej komponent DecisionRequester
         dr = GetComponent<DecisionRequester>();
+        // Zapisz do zmiennej komponent RayPerceptionSensorComponent3D
         raySensor = GetComponent<RayPerceptionSensorComponent3D>();
+        // Wywo³aj metode setRigibody
         setRigibody();
+        // Wywo³aj metode do ustawienia parametrów uczenia
         //setLearningParams();
     }
+    // Metoda wywo³ywana z momencie rozpoczecia epizodu 
     public override void OnEpisodeBegin()
     {
-            
+        // Wywo³aj metode klasy bazowej
         base.OnEpisodeBegin();
-
+        // Znajdz obiekt typu mazegenerator i wywo³aj metode generateNewMaze
         FindObjectOfType<MazeGenerator>().GenerateNewMaze();
-
+        // Wywo³aj metode do resetowania ustawieñ agenta 
         ResetAgent();
-
+        // Przypisz poczatkowy dystans do celu jako aktualny
         actualDistanceToTarget = StartDistanceToTarget;
 
     }
-    // Metoda do okreslenia celu jaki ma osiagnac AI
 
+    // Metoda do okreslenia celu jaki ma osiagnac AI
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(this.transform.localPosition); //pozycja AI
@@ -123,8 +143,11 @@ public class MazeAI : Agent
         // Sprawdzenie czy nie przekroczono maksymalnej ilosci akcji
         if (StepCount >= MaxStep)
         {
+            // Wywo³aj poni¿sza metode z MazeAcademy z parametrem time
             env.OnEpisodeEnd("time");
+            // Przyznaj nagrode -1 
             SetReward(-1f);
+            // Zakoñcz epizod
             EndEpisode();
         }
 
@@ -159,9 +182,10 @@ public class MazeAI : Agent
         // Przesuniêcie agenta
         transform.localPosition += transform.forward * forwardAmount * Time.fixedDeltaTime * env.GetMovementSpeed();
 
-
+        // Obliczenie aktualnego dystansu do celu i przypisanie do zmiennej
         actualDistanceToTarget = env.GetDistanceToTarget();
 
+        // Wywo³anie metody, która przydzieli odpowiednie nagrody
         CalculateRewards();
 
     }
@@ -191,8 +215,6 @@ public class MazeAI : Agent
         {
             discreteActions[1] = 2; // Skrêt w prawo
         }
-
-
     }
     // Metoda do resetowania œladu 
     private void ResetTrail()
@@ -200,19 +222,27 @@ public class MazeAI : Agent
         trailRenderer.Clear();
         trailRenderer.enabled = true;
     }
-
+    // Wywo³ywane w momencie kolizji z obiektem z ustawionym triggerem
     private void OnTriggerEnter(Collider collision)
     {
+        // Jeœli jest to Cel to..
         if (collision.gameObject.CompareTag("Target"))
         {
-            AddReward(2f); //do 5x5 bylo 1
+            // Daj 2 punkty nagrody
+            AddReward(2f); 
+            // Wywo³aj poni¿sza metode z MazeAcademy z parametrem target
             env.OnEpisodeEnd("target");
+            // Zakoncz epizod 
             EndEpisode();
         }
+        // Jeœli to œciana to ..
         if (collision.gameObject.CompareTag("Wall"))
         {
+            // Przyznaj -1 nagrody
             SetReward(-1f);
+            // Wywo³aj poni¿sza metode z MazeAcademy z parametrem hit
             env.OnEpisodeEnd("hit");
+            // Zakoñcz epizod
             EndEpisode();
 
         }

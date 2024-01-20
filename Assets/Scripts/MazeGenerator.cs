@@ -27,7 +27,7 @@ public class MazeGenerator : MonoBehaviour
         mazeAcademy = GetComponent<MazeAcademy>();
         GenerateNewMaze();
         mazeAcademy.generateAgent();
-        SuccessCounter.OnIntValueUpdated += HandleIntValueUpdated;
+        Widget.OnIntValueUpdated += HandleIntValueUpdated;
     }
 
     private void Update()

@@ -10,7 +10,7 @@ learn with config and previous model
 mlagents-learn config/MoveToTarget.yaml --initialize-from=TestWithYaml --run-id=TestWithYamlAndInit 
 
 
-mlagents-learn config/MoveToTarget.yaml --env=../env/MazeDiscover --num-envs=12 --run-id=MazeAI1
+mlagents-learn config/MoveToTarget.yaml --env=../env/MazeDiscover --num-envs=12 --run-id=Siec1
 
 
 

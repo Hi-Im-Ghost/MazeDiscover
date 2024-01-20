@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SuccessCounter : MonoBehaviour
+public class Widget : MonoBehaviour
 {
     public delegate void IntValueUpdatedEventHandler(int value1, int value2);
     public static event IntValueUpdatedEventHandler OnIntValueUpdated;
